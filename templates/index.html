@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfluAIze</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to InfluAIze</h1>
+        <nav>
+            <button id="auth-btn">Authorize with Twitter</button>
+            <!-- Add more navigation items as needed -->
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section to display user's Twitter profile information -->
+        <section id="profile-info" style="display:none;">
+            <h2>Profile Information</h2>
+            <p><strong>Name:</strong> <span id="user-name"></span></p>
+            <p><strong>Followers:</strong> <span id="followers-count"></span></p>
+        </section>
+
+        <!-- Form for creating a new post -->
+        <section id="post-creation" style="display:none;">
+            <h2>Create a New Post</h2>
+            <form id="new-post-form">
+                <textarea id="post-content" placeholder="What's happening?" required></textarea>
+                <button type="submit">Post to Twitter</button>
+            </form>
+        </section>
+
+        <!-- Section to display analysis results -->
+        <section id="analysis-results" style="display:none;">
+            <h2>Analysis Results</h2>
+            <p><strong>Average Retweets:</strong> <span id="avg-retweets"></span></p>
+            <!-- Add more analysis results as needed -->
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
