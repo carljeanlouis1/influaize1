@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfluAIze</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="/">InfluAIze</a></div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/new-post">New Post</a></li>
+                <li><a href="/analysis">Analysis</a></li>
+            </ul>
+            {% if user_data %}
+                <div class="user-info">
+                    <span>Welcome, {{ user_data.name }}</span>
+                    <a href="/logout" id="logout-btn">Logout</a>
+                </div>
+            {% else %}
+                <button id="auth-btn">Authorize with Twitter</button>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 InfluAIze. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

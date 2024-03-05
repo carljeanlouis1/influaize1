@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section id="analysis">
+        {% if user_data %}
+            <h1>Twitter Analysis</h1>
+            <div class="analysis-section">
+                <h2>Engagement Analysis</h2>
+                <canvas id="engagement-chart"></canvas>
+                <p>Your average engagement rate is <span id="engagement-rate">{{ engagement_rate }}</span>%.</p>
+            </div>
+            <div class="analysis-section">
+                <h2>Sentiment Analysis</h2>
+                <canvas id="sentiment-chart"></canvas>
+                <p>The overall sentiment of your tweets is <span id="sentiment-score">{{ sentiment_score }}</span>.</p>
+            </div>
+            <div class="analysis-section">
+                <h2>Topic Analysis</h2>
+                <ul id="topic-list">
+                    {% for topic in topics %}
+                        <li>{{ topic }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="analysis-placeholder">
+                <h2>Gain Valuable Insights with AI-Powered Analysis</h2>
+                <p>The analysis section harnesses the power of AI to provide you with in-depth insights into your social media performance. By analyzing your Twitter data, InfluAIze can:</p>
+                <ul>
+                    <li>Evaluate your engagement rates and identify top-performing content</li>
+                    <li>Analyze the sentiment of your tweets and audience reactions</li>
+                    <li>Detect trending topics and hashtags relevant to your niche</li>
+                    <li>Provide personalized recommendations to improve your influence</li>
+                </ul>
+                <p>To access these powerful analytics and insights, please authorize your Twitter account first.</p>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

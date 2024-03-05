@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section id="new-post">
+        {% if user_data %}
+            <h1>Create a New Tweet</h1>
+            <form id="new-post-form">
+                <textarea id="tweet-content" rows="4" placeholder="What's happening?" maxlength="280" required></textarea>
+                <div class="char-count">
+                    <span id="char-count">280</span> characters remaining
+                </div>
+                <div class="media-upload">
+                    <label for="media-input">Attach Image</label>
+                    <input type="file" id="media-input" accept="image/*">
+                </div>
+                <button type="submit">Tweet</button>
+            </form>
+        {% else %}
+            <div class="new-post-placeholder">
+                <h2>Compose Engaging Tweets with AI Assistance</h2>
+                <p>The new post section allows you to create and publish tweets directly from InfluAIze. With our advanced AI algorithms, you can:</p>
+                <ul>
+                    <li>Generate optimized tweet content based on your target audience and goals</li>
+                    <li>Receive suggestions for hashtags and mentions to maximize visibility</li>
+                    <li>Analyze the sentiment and potential engagement of your draft tweets</li>
+                    <li>Schedule your tweets for the best posting times</li>
+                </ul>
+                <p>To start creating tweets with AI assistance, please authorize your Twitter account first.</p>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
