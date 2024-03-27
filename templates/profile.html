@@ -4,37 +4,53 @@
     <section id="profile">
         {% if user_data %}
             <div class="profile-header">
-                <img src="{{ user_data.profile_image_url }}" alt="Profile Picture" class="profile-picture">
-                <h1>{{ user_data.name }}</h1>
-                <p>@{{ user_data.screen_name }}</p>
-                <p>{{ user_data.description }}</p>
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <img src="{{ user_data.profile_image_url }}" alt="Profile Picture" class="profile-picture">
+                    <h2 class="profile-name">{{ user_data.name }}</h2>
+                    <p class="screen-name">@{{ user_data.screen_name }}</p>
+                    <p class="bio">{{ user_data.description }}</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <h3>Tweets</h3>
+                            <p>{{ user_data.statuses_count }}</p>
+                        </div>
+                        <div class="stat">
+                            <h3>Followers</h3>
+                            <p>{{ user_data.followers_count }}</p>
+                        </div>
+                        <div class="stat">
+                            <h3>Following</h3>
+                            <p>{{ user_data.friends_count }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <h3>Tweets</h3>
-                    <p>{{ user_data.statuses_count }}</p>
+            <div class="profile-content">
+                <div class="content-section">
+                    <h3>Top Tweets</h3>
+                    <ul class="tweet-list">
+                        <!-- Placeholder for tweet items -->
+                    </ul>
                 </div>
-                <div class="stat-item">
-                    <h3>Following</h3>
-                    <p>{{ user_data.friends_count }}</p>
+                <div class="content-section">
+                    <h3>Engagement Analytics</h3>
+                    <div class="analytics-chart">
+                        <!-- Placeholder for engagement analytics chart -->
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <h3>Followers</h3>
-                    <p>{{ user_data.followers_count }}</p>
+                <div class="content-section">
+                    <h3>Audience Demographics</h3>
+                    <div class="demographics-info">
+                        <!-- Placeholder for audience demographics data -->
+                    </div>
                 </div>
             </div>
         {% else %}
             <div class="profile-placeholder">
-                <h2>Your Social Media Dashboard</h2>
-                <p>The profile section provides you with a comprehensive overview of your social media presence. Once you connect your Twitter account, you'll be able to see your key metrics, including:</p>
-                <ul>
-                    <li>Total number of tweets</li>
-                    <li>Number of people you follow</li>
-                    <li>Number of followers</li>
-                    <li>Profile information and bio</li>
-                </ul>
-                <p>In the future, we plan to integrate additional social media platforms, allowing you to manage all your profiles in one convenient place.</p>
-                <p>To access your profile dashboard, please authorize your Twitter account first.</p>
+                <i class="fas fa-user-circle"></i>
+                <h2>Profile</h2>
+                <p>Please authorize with Twitter to view your profile information.</p>
             </div>
         {% endif %}
     </section>

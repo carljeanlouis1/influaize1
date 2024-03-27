@@ -2,37 +2,19 @@
 
 {% block content %}
     <section id="analysis">
+        <h2>Analysis</h2>
         {% if user_data %}
-            <h1>Twitter Analysis</h1>
-            <div class="analysis-section">
-                <h2>Engagement Analysis</h2>
-                <canvas id="engagement-chart"></canvas>
-                <p>Your average engagement rate is <span id="engagement-rate">{{ engagement_rate }}</span>%.</p>
-            </div>
-            <div class="analysis-section">
-                <h2>Sentiment Analysis</h2>
-                <canvas id="sentiment-chart"></canvas>
-                <p>The overall sentiment of your tweets is <span id="sentiment-score">{{ sentiment_score }}</span>.</p>
-            </div>
-            <div class="analysis-section">
-                <h2>Topic Analysis</h2>
-                <ul id="topic-list">
-                    {% for topic in topics %}
-                        <li>{{ topic }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="analysis-result">
+                <h3>Sentiment Analysis</h3>
+                <p>{{ sentiment_analysis }}</p>
+                <!-- Add more analysis results as needed -->
             </div>
         {% else %}
-            <div class="analysis-placeholder">
-                <h2>Gain Valuable Insights with AI-Powered Analysis</h2>
-                <p>The analysis section harnesses the power of AI to provide you with in-depth insights into your social media performance. By analyzing your Twitter data, InfluAIze can:</p>
-                <ul>
-                    <li>Evaluate your engagement rates and identify top-performing content</li>
-                    <li>Analyze the sentiment of your tweets and audience reactions</li>
-                    <li>Detect trending topics and hashtags relevant to your niche</li>
-                    <li>Provide personalized recommendations to improve your influence</li>
-                </ul>
-                <p>To access these powerful analytics and insights, please authorize your Twitter account first.</p>
+            <div class="analysis-intro">
+                <p>Welcome to the Analysis page! Here, you can gain valuable insights into your Twitter data using the power of AI.</p>
+                <p>Once you authenticate with Twitter, our advanced algorithms will analyze your tweets and provide sentiment analysis, helping you understand the overall tone and emotion of your content.</p>
+                <p>You'll also receive other useful metrics and data points to help you make informed decisions about your Twitter strategy.</p>
+                <p>To get started, simply click the "Authorize with Twitter" button on the homepage and grant access to your Twitter account.</p>
             </div>
         {% endif %}
     </section>

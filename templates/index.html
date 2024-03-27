@@ -2,28 +2,56 @@
 
 {% block content %}
     <section id="hero">
-        <h1>Welcome to InfluAIze</h1>
-        <p>Enhance your social media influence with AI-powered insights.</p>
-        {% if not user_data %}
-            <div class="cta-section">
-                <h2>Unlock the Power of AI for Your Social Media</h2>
-                <p>InfluAIze is a revolutionary app that helps you maximize your social media potential. By leveraging cutting-edge AI algorithms, InfluAIze provides you with valuable insights and recommendations to grow your influence and engage your audience effectively.</p>
-                <p>With InfluAIze, you can:</p>
-                <ul>
-                    <li>Analyze your social media performance</li>
-                    <li>Generate optimized content tailored to your audience</li>
-                    <li>Discover the best times to post for maximum reach</li>
-                    <li>Identify trending topics and hashtags in your niche</li>
-                    <li>And much more!</li>
-                </ul>
-                <p>To get started, simply connect your Twitter account and let InfluAIze work its magic. Click the "Authorize with Twitter" button below to begin your journey to social media success.</p>
+        <div class="hero-content">
+            <h1>Welcome to InfluAIze</h1>
+            <p>Enhance your social media influence with AI-powered insights.</p>
+            {% if not user_data %}
                 <button id="auth-btn">Authorize with Twitter</button>
+            {% else %}
+                <div class="welcome-section">
+                    <h2>Welcome, {{ user_data.name }}!</h2>
+                    <p>You're all set to start using InfluAIze. Explore the different sections of the app to analyze your Twitter profile, create new posts, and gain valuable insights to grow your influence.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
-        {% else %}
-            <div class="welcome-section">
-                <h2>Welcome, {{ user_data.name }}!</h2>
-                <p>You're all set to start using InfluAIze. Explore the different sections of the app to analyze your Twitter profile, create new posts, and gain valuable insights to grow your influence.</p>
+            <h3>Analyze Your Performance</h3>
+            <p>Get in-depth analytics and insights about your social media performance.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-cogs"></i>
             </div>
+            <h3>Optimize Your Content</h3>
+            <p>Generate optimized content tailored to your audience for maximum engagement.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3>Perfect Timing</h3>
+            <p>Discover the best times to post for maximum reach and impact.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-hashtag"></i>
+            </div>
+            <h3>Trending Topics</h3>
+            <p>Identify trending topics and hashtags in your niche to stay relevant.</p>
+        </div>
+    </section>
+
+    <section id="cta">
+        <h2>Unlock the Power of AI for Your Social Media</h2>
+        <p>Start your journey to social media success with InfluAIze today!</p>
+        {% if not user_data %}
+            <button id="auth-btn">Authorize with Twitter</button>
         {% endif %}
     </section>
 {% endblock %}

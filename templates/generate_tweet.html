@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section id="generate-tweet">
+        {% if user_data %}
+            <h2>Generate Tweet Suggestions</h2>
+            <form id="generate-tweet-form" method="POST" action="/generate-tweet">
+                <label for="topic">Enter a topic or keyword:</label>
+                <input type="text" id="topic" name="topic" required>
+
+                <label for="tone">Tone:</label>
+                <select id="tone" name="tone">
+                    <option value="neutral">Neutral</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="professional">Professional</option>
+                    <option value="humorous">Humorous</option>
+                </select>
+
+                <label for="length">Length:</label>
+                <select id="length" name="length">
+                    <option value="short">Short</option>
+                    <option value="medium">Medium</option>
+                    <option value="long">Long</option>
+                </select>
+
+                <label for="hashtags">Hashtags:</label>
+                <input type="text" id="hashtags" name="hashtags" placeholder="Enter hashtags (comma-separated)">
+
+                <label for="mentions">Mentions:</label>
+                <input type="text" id="mentions" name="mentions" placeholder="Enter mentions (comma-separated)">
+
+                <button type="submit">Generate Suggestions</button>
+            </form>
+            <div id="tweet-suggestions">
+                {% if tweet_suggestions %}
+                    <h3>Tweet Suggestions:</h3>
+                    <ul>
+                        {% for suggestion in tweet_suggestions %}
+                            <li>
+                                {{ suggestion }}
+                                <button class="post-tweet-btn" data-tweet="{{ suggestion }}">Post Tweet</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="generate-tweet-placeholder">
+                <i class="fas fa-lightbulb"></i>
+                <h2>Generate Tweet</h2>
+                <p>Please authorize with Twitter to generate tweet suggestions.</p>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
