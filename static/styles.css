@@ -323,7 +323,9 @@ footer {
     display: block;
 }
 
-#generate-tweet-form input[type="text"] {
+#generate-tweet-form input[type="text"],
+#generate-tweet-form textarea,
+#generate-tweet-form select {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -343,11 +345,13 @@ footer {
     cursor: pointer;
 }
 
-#tweet-suggestions {
+#tweet-suggestions,
+#enhanced-tweet-section {
     margin-top: 20px;
 }
 
-#tweet-suggestions h3 {
+#tweet-suggestions h3,
+#enhanced-tweet-section h3 {
     font-size: 20px;
     margin-bottom: 10px;
 }
@@ -366,4 +370,118 @@ footer {
     font-size: 100px;
     color: #1da1f2;
     margin-bottom: 20px;
+}
+
+/* AI Image Generation */
+#ai-image {
+    margin-top: 40px;
+}
+
+#ai-image-form {
+    margin-bottom: 20px;
+}
+
+#ai-image-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#ai-image-form textarea,
+#ai-image-form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#ai-image-form button[type="submit"] {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+#generated-image-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#generated-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+#download-image-btn {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+/* AI Chatbot */
+#ai-chatbot {
+    margin-top: 40px;
+}
+
+#chatbot-container {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#chatbot-messages {
+    height: 400px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.user-message {
+    background-color: #e6f7ff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.bot-message {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#chatbot-input-container {
+    display: flex;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ccc;
+}
+
+#chatbot-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chatbot-send-btn {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
 }
