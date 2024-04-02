@@ -1,55 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section id="generate-tweet">
-        {% if user_data %}
-            <h2>Generate Tweet Suggestions</h2>
-            <form id="generate-tweet-form" method="POST" action="/generate-tweet">
-                <label for="topic">Enter a topic or keyword:</label>
-                <input type="text" id="topic" name="topic" required>
+<section id="generate-tweet">
+    {% if user_data %}
+        <h2>Craft Your Tweet with AI</h2>
+        <form id="generate-tweet-form" method="POST" action="/generate-tweet">
+            <label for="tweet-input">Enter your tweet:</label>
+            <textarea id="tweet-input" name="tweet_input" rows="4" maxlength="280" placeholder="Type your tweet here..." required></textarea>
 
-                <label for="tone">Tone:</label>
-                <select id="tone" name="tone">
-                    <option value="neutral">Neutral</option>
-                    <option value="friendly">Friendly</option>
-                    <option value="professional">Professional</option>
-                    <option value="humorous">Humorous</option>
-                </select>
+            <label for="tone">Select a tone:</label>
+            <select id="tone" name="tone">
+                <option value="neutral">Neutral</option>
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="humorous">Humorous</option>
+                <option value="persuasive">Persuasive</option>
+                <option value="informative">Informative</option>
+            </select>
 
-                <label for="length">Length:</label>
-                <select id="length" name="length">
-                    <option value="short">Short</option>
-                    <option value="medium">Medium</option>
-                    <option value="long">Long</option>
-                </select>
+            <label for="hashtags">Add hashtags (comma-separated):</label>
+            <input type="text" id="hashtags" name="hashtags" placeholder="Enter hashtags">
 
-                <label for="hashtags">Hashtags:</label>
-                <input type="text" id="hashtags" name="hashtags" placeholder="Enter hashtags (comma-separated)">
+            <label for="mentions">Add mentions (comma-separated):</label>
+            <input type="text" id="mentions" name="mentions" placeholder="Enter mentions">
 
-                <label for="mentions">Mentions:</label>
-                <input type="text" id="mentions" name="mentions" placeholder="Enter mentions (comma-separated)">
+            <label for="emoji">Include emojis:</label>
+            <input type="checkbox" id="emoji" name="emoji">
 
-                <button type="submit">Generate Suggestions</button>
-            </form>
-            <div id="tweet-suggestions">
-                {% if tweet_suggestions %}
-                    <h3>Tweet Suggestions:</h3>
-                    <ul>
-                        {% for suggestion in tweet_suggestions %}
-                            <li>
-                                {{ suggestion }}
-                                <button class="post-tweet-btn" data-tweet="{{ suggestion }}">Post Tweet</button>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-        {% else %}
-            <div class="generate-tweet-placeholder">
-                <i class="fas fa-lightbulb"></i>
-                <h2>Generate Tweet</h2>
-                <p>Please authorize with Twitter to generate tweet suggestions.</p>
-            </div>
-        {% endif %}
-    </section>
+            <button type="submit">Enhance Tweet</button>
+        </form>
+        <div id="enhanced-tweet-section" style="display: none;">
+            <h3>Enhanced Tweet:</h3>
+            <div id="enhanced-tweet"></div>
+            <button id="post-tweet-btn">Post Tweet</button>
+        </div>
+    {% else %}
+        <div class="generate-tweet-placeholder">
+            <i class="fas fa-lightbulb"></i>
+            <h2>Craft Your Tweet with AI</h2>
+            <p>Please authorize with Twitter to start crafting and enhancing your tweets using AI.</p>
+        </div>
+    {% endif %}
+</section>
 {% endblock %}

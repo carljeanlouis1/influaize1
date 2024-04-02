@@ -33,63 +33,141 @@ document.addEventListener('DOMContentLoaded', function() {
     if (generateTweetForm) {
         generateTweetForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            const topic = document.getElementById('topic').value;
-            const tone = document.getElementById('tone').value;
-            const length = document.getElementById('length').value;
-            const hashtags = document.getElementById('hashtags').value;
-            const mentions = document.getElementById('mentions').value;
+            const formData = new FormData(generateTweetForm);
 
-            // Send the form data to the server
             fetch('/generate-tweet', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    topic: topic,
-                    tone: tone,
-                    length: length,
-                    hashtags: hashtags,
-                    mentions: mentions,
-                }),
+                body: formData,
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                // Update the page with the generated tweet suggestions
-                const tweetSuggestionsContainer = document.getElementById('tweet-suggestions');
-                tweetSuggestionsContainer.innerHTML = data;
-
-                // Attach event listeners to the "Post Tweet" buttons
-                const postTweetButtons = document.querySelectorAll('.post-tweet-btn');
-                postTweetButtons.forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        const tweetText = this.getAttribute('data-tweet');
-
-                        fetch('/post-tweet', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ tweet_text: tweetText }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.message) {
-                                alert('Tweet posted successfully!');
-                            } else if (data.error) {
-                                alert('Failed to post tweet. Please try again.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred. Please try again.');
-                        });
-                    });
-                });
+                const enhancedTweet = data.enhanced_tweet;
+                document.getElementById('enhanced-tweet').textContent = enhancedTweet;
+                document.getElementById('enhanced-tweet-section').style.display = 'block';
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+        });
+
+        const postTweetBtn = document.getElementById('post-tweet-btn');
+        postTweetBtn.addEventListener('click', function() {
+            const tweetText = document.getElementById('enhanced-tweet').textContent;
+
+            fetch('/post-tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tweet_text: tweetText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert('Tweet posted successfully!');
+                } else if (data.error) {
+                    alert('Failed to post tweet. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    }
+
+    const tweetInput = document.getElementById('tweet-input');
+    if (tweetInput) {
+        tweetInput.addEventListener('input', function() {
+            const tweetLength = this.value.length;
+            const remainingChars = 280 - tweetLength;
+            document.getElementById('remaining-chars').textContent = remainingChars;
+        });
+    }
+
+    const aiImageForm = document.getElementById('ai-image-form');
+    if (aiImageForm) {
+        aiImageForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const tweetInput = document.getElementById('tweet-input').value;
+            const imageSize = document.getElementById('image-size').value;
+
+            fetch('/ai-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tweet_input: tweetInput, image_size: imageSize }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const imageUrl = data.image_url;
+                document.getElementById('generated-image').src = imageUrl;
+                document.getElementById('generated-image-section').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        const downloadImageBtn = document.getElementById('download-image-btn');
+        downloadImageBtn.addEventListener('click', function() {
+            const imageUrl = document.getElementById('generated-image').src;
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'generated_image.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+
+    if (chatbotSendBtn) {
+        chatbotSendBtn.addEventListener('click', function() {
+            const message = chatbotInput.value;
+            if (message.trim() !== '') {
+                // Display user message in the chatbot messages container
+                const userMessage = document.createElement('div');
+                userMessage.className = 'user-message';
+                userMessage.textContent = message;
+                chatbotMessages.appendChild(userMessage);
+
+                // Clear the input field
+                chatbotInput.value = '';
+
+                // Send message to the server for processing
+                fetch('/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const botResponse = data.response;
+                    // Display bot response in the chatbot messages container
+                    const botMessage = document.createElement('div');
+                    botMessage.className = 'bot-message';
+                    botMessage.textContent = botResponse;
+                    chatbotMessages.appendChild(botMessage);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+
+        // Add event listener for Enter key press in the chatbot input
+        chatbotInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                chatbotSendBtn.click();
+            }
         });
     }
 });

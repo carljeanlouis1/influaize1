@@ -23,7 +23,6 @@ CORS(app)
 
 app.secret_key = os.getenv('FLASK_SECRET_KEY') or 'your-random-secret-key'
 
-
 @app.route('/')
 def index():
     user_data = None
@@ -32,7 +31,6 @@ def index():
         api = tweepy.API(auth)
         user_data = api.verify_credentials()
     return render_template('index.html', user_data=user_data)
-
 
 @app.route('/auth')
 def twitter_auth():
@@ -43,7 +41,6 @@ def twitter_auth():
     except tweepy.TweepError as e:
         print(f'An error occurred during Twitter auth: {e}')
         return jsonify({'error': 'Error! Failed to get request token.'}), 500
-
 
 @app.route('/callback')
 def twitter_callback():
@@ -63,13 +60,11 @@ def twitter_callback():
         print(f'An error occurred during Twitter callback: {e}')
         return jsonify({'error': 'Failed to authenticate with Twitter.'}), 500
 
-
 @app.route('/logout')
 def logout():
     session.pop('access_token', None)
     session.pop('access_token_secret', None)
     return redirect('/')
-
 
 @app.route('/profile')
 def profile():
@@ -80,7 +75,6 @@ def profile():
         user_data = api.verify_credentials()
     return render_template('profile.html', user_data=user_data)
 
-
 @app.route('/new-post')
 def new_post():
     user_data = None
@@ -89,7 +83,6 @@ def new_post():
         api = tweepy.API(auth)
         user_data = api.verify_credentials()
     return render_template('new_post.html', user_data=user_data)
-
 
 @app.route('/analysis')
 def analysis():
@@ -103,48 +96,57 @@ def analysis():
             tweets = api.user_timeline(count=100)
             tweet_texts = ' '.join([tweet.text for tweet in tweets])
             prompt = f"Perform sentiment analysis on the following tweets:\n{tweet_texts}\n\nSentiment Analysis:"
-            response = openai.Completion.create(
-                engine='text-davinci-002',
-                prompt=prompt,
+            response = openai.ChatCompletion.create(
+                model='gpt-4',
+                messages=[
+                    {'role': 'system', 'content': 'You are a helpful assistant that performs sentiment analysis on tweets.'},
+                    {'role': 'user', 'content': prompt}
+                ],
                 max_tokens=100,
                 n=1,
                 stop=None,
                 temperature=0.7
             )
-            sentiment_analysis = response.choices[0].text.strip()
+            sentiment_analysis = response['choices'][0]['message']['content'].strip()
         except tweepy.TweepyException as e:
             print(f"Error occurred while fetching tweets: {e}")
             sentiment_analysis = "Unable to perform sentiment analysis due to limited API access."
     return render_template('analysis.html', user_data=user_data, sentiment_analysis=sentiment_analysis)
 
-
 @app.route('/generate-tweet', methods=['GET', 'POST'])
 def generate_tweet():
     user_data = None
-    tweet_suggestions = None
     if 'access_token' in session:
         auth.set_access_token(session['access_token'], session['access_token_secret'])
         api = tweepy.API(auth)
         user_data = api.verify_credentials()
         if request.method == 'POST':
-            topic = request.form['topic']
+            tweet_input = request.form['tweet_input']
             tone = request.form['tone']
-            length = request.form['length']
             hashtags = request.form['hashtags']
             mentions = request.form['mentions']
+            include_emoji = 'emoji' in request.form
 
-            prompt = f"Generate a {length} tweet about {topic} with a {tone} tone. Include the following hashtags: {hashtags}. Mention the following users: {mentions}."
-            response = openai.Completion.create(
-                engine='text-davinci-002',
-                prompt=prompt,
-                max_tokens=100,
-                n=3,
+            prompt = f"Enhance the following tweet with a {tone} tone, include hashtags ({hashtags}) and mentions ({mentions}):\n\n{tweet_input}\n\nEnhanced tweet:"
+            if include_emoji:
+                prompt += " Include relevant emojis in the enhanced tweet."
+
+            response = openai.ChatCompletion.create(
+                model='gpt-4',
+                messages=[
+                    {'role': 'system', 'content': 'You are a helpful assistant that enhances tweets.'},
+                    {'role': 'user', 'content': prompt}
+                ],
+                max_tokens=280,
+                n=1,
                 stop=None,
                 temperature=0.7
             )
-            tweet_suggestions = [choice.text.strip() for choice in response.choices]
-    return render_template('generate_tweet.html', user_data=user_data, tweet_suggestions=tweet_suggestions)
+            enhanced_tweet = response['choices'][0]['message']['content'].strip()
 
+            return jsonify({'enhanced_tweet': enhanced_tweet})
+
+    return render_template('generate_tweet.html', user_data=user_data)
 
 @app.route('/post-tweet', methods=['POST'])
 def post_tweet():
@@ -163,6 +165,65 @@ def post_tweet():
     else:
         return jsonify({'error': 'User not authenticated'}), 401
 
+@app.route('/ai-image', methods=['GET', 'POST'])
+def ai_image():
+    user_data = None
+    if 'access_token' in session:
+        auth.set_access_token(session['access_token'], session['access_token_secret'])
+        api = tweepy.API(auth)
+        user_data = api.verify_credentials()
+        if request.method == 'POST':
+            tweet_input = request.json['tweet_input']
+            image_size = request.json['image_size']
+
+            # Generate AI image based on tweet using DALL-E 3 API
+            image_url = generate_ai_image(tweet_input, image_size)
+
+            return jsonify({'image_url': image_url})
+
+    return render_template('ai_image.html', user_data=user_data)
+
+def generate_ai_image(tweet, image_size):
+    try:
+        response = openai.Image.create(
+            model="dall-e-3",
+            prompt=tweet,
+            n=1,
+            size=image_size,
+        )
+        image_url = response['data'][0]['url']
+        return image_url
+    except openai.error.OpenAIError as e:
+        print(f"Error occurred while generating AI image: {e}")
+        return None
+
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    message = request.json['message']
+
+    # Generate chatbot response using OpenAI Chat Completion API
+    response = generate_chatbot_response(message)
+
+    return jsonify({'response': response})
+
+def generate_chatbot_response(message):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful AI assistant."},
+                {"role": "user", "content": message}
+            ],
+            max_tokens=150,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
+        chatbot_response = response.choices[0].message['content'].strip()
+        return chatbot_response
+    except openai.error.OpenAIError as e:
+        print(f"Error occurred while generating chatbot response: {e}")
+        return "Sorry, I couldn't generate a response. Please try again."
 
 if __name__ == '__main__':
     app.run(debug=True)
